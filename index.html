@@ -18,8 +18,23 @@
       --green-border: #BBF7D0;
       --border: #E4E0D8;
       --white: #FFFFFF;
+      --shadow: 0 10px 30px rgba(0,0,0,0.05);
+      --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); line-height: 1.6; }
+    
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); line-height: 1.6; overflow-x: hidden; }
+
+    /* SCROLL ANIMATION CLASS */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: var(--transition);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     /* AVAILABILITY BANNER */
     .avail-banner {
@@ -29,6 +44,7 @@
       padding: 14px 20px;
       position: relative;
       overflow: hidden;
+      z-index: 10;
     }
     .avail-banner::before {
       content: '';
@@ -53,8 +69,8 @@
       flex-shrink: 0;
     }
     @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 3px rgba(74,222,128,0.25); }
-      50% { box-shadow: 0 0 0 7px rgba(74,222,128,0.1); }
+      0%, 100% { box-shadow: 0 0 0 3px rgba(74,222,128,0.25); transform: scale(1); }
+      50% { box-shadow: 0 0 0 8px rgba(74,222,128,0.1); transform: scale(1.1); }
     }
     .avail-text { font-size: 14px; font-weight: 500; }
     .avail-text strong { color: #4ADE80; }
@@ -62,171 +78,289 @@
       display: inline-flex; align-items: center; gap: 5px;
       background: #4ADE80; color: #0f2418;
       font-size: 12px; font-weight: 600;
-      padding: 5px 14px; border-radius: 100px;
+      padding: 6px 16px; border-radius: 100px;
       text-decoration: none; letter-spacing: 0.3px;
-      transition: background 0.2s;
+      transition: var(--transition);
+      animation: gentle-shiver 4s infinite ease-in-out;
     }
-    .book-now-btn:hover { background: #22c55e; }
+    .book-now-btn:hover { background: #22c55e; transform: scale(1.05); }
+
+    @keyframes gentle-shiver {
+      0%, 90%, 100% { transform: rotate(0deg); }
+      92% { transform: rotate(3deg); }
+      94% { transform: rotate(-3deg); }
+      96% { transform: rotate(2deg); }
+      98% { transform: rotate(-2deg); }
+    }
 
     /* HERO */
-    .hero { background: var(--dark); color: var(--white); padding: 3rem 1.5rem 2.5rem; text-align: center; }
-    .hero-badge { display: inline-block; background: var(--accent); color: var(--white); font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; padding: 5px 14px; border-radius: 100px; margin-bottom: 1.2rem; }
-    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1.2; margin-bottom: 0.75rem; }
-    .hero-address { font-size: 15px; color: #B0AEA6; display: flex; align-items: center; justify-content: center; gap: 6px; }
-    .hero-price { margin-top: 1.8rem; display: inline-flex; align-items: baseline; gap: 6px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); padding: 10px 24px; border-radius: 12px; }
-    .hero-price .amount { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent); }
+    .hero { background: var(--dark); color: var(--white); padding: 4rem 1.5rem 3.5rem; text-align: center; position: relative; }
+    .hero-badge { 
+      display: inline-block; 
+      background: var(--accent); 
+      color: var(--white); 
+      font-size: 11px; 
+      font-weight: 600; 
+      letter-spacing: 1.5px; 
+      text-transform: uppercase; 
+      padding: 6px 16px; 
+      border-radius: 100px; 
+      margin-bottom: 1.2rem;
+      animation: fadeInDown 0.8s ease-out;
+    }
+    .hero h1 { 
+      font-family: 'Playfair Display', serif; 
+      font-size: clamp(2rem, 6vw, 3.2rem); 
+      line-height: 1.2; 
+      margin-bottom: 0.75rem;
+      animation: fadeInUp 0.8s ease-out;
+    }
+    .hero-owner {
+      font-size: 14px;
+      color: var(--accent-light);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      animation: fadeInUp 1s ease-out;
+    }
+    .hero-address { 
+      font-size: 15px; 
+      color: #B0AEA6; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 6px;
+      animation: fadeInUp 1.2s ease-out;
+    }
+    .hero-price { 
+      margin-top: 1.8rem; 
+      display: inline-flex; 
+      align-items: baseline; 
+      gap: 6px; 
+      background: rgba(255,255,255,0.05); 
+      border: 1px solid rgba(255,255,255,0.1); 
+      padding: 12px 28px; 
+      border-radius: 14px; 
+      animation: fadeInUp 1.4s ease-out;
+      transition: var(--transition);
+    }
+    .hero-price:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .hero-price .amount { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--accent); font-weight: 700; }
     .hero-price .per { font-size: 14px; color: #B0AEA6; }
 
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* BOOKING CARD */
-    .booking-section { max-width: 960px; margin: 2rem auto 0; padding: 0 1.5rem; }
+    .booking-section { max-width: 960px; margin: 2.5rem auto 0; padding: 0 1.5rem; }
     .booking-card {
       background: var(--green-bg);
       border: 2px solid var(--green-border);
-      border-radius: 18px;
-      padding: 1.5rem;
+      border-radius: 20px;
+      padding: 1.8rem;
       display: flex;
       align-items: center;
-      gap: 1.2rem;
+      gap: 1.5rem;
       flex-wrap: wrap;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
     }
-    .booking-icon { font-size: 2.5rem; flex-shrink: 0; }
+    .booking-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(22,163,74,0.08);
+    }
+    .booking-icon { font-size: 2.8rem; flex-shrink: 0; animation: bounce 2s infinite ease-in-out; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
     .booking-text { flex: 1; min-width: 200px; }
-    .booking-text h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--green); margin-bottom: 4px; }
-    .booking-text p { font-size: 13px; color: #166534; line-height: 1.5; }
+    .booking-text h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--green); margin-bottom: 6px; }
+    .booking-text p { font-size: 13.5px; color: #166534; line-height: 1.6; }
     .booking-cta {
       display: inline-flex; align-items: center; gap: 8px;
       background: var(--green); color: #fff;
       font-size: 14px; font-weight: 600;
-      padding: 11px 22px; border-radius: 100px;
+      padding: 12px 24px; border-radius: 100px;
       text-decoration: none;
-      transition: background 0.2s;
+      box-shadow: 0 4px 15px rgba(22,163,74,0.3);
+      transition: var(--transition);
       white-space: nowrap;
     }
-    .booking-cta:hover { background: #15803d; }
+    .booking-cta:hover { background: #15803d; transform: scale(1.03); box-shadow: 0 6px 20px rgba(22,163,74,0.4); }
 
     /* GALLERY */
-    .gallery-section { padding: 2.5rem 1.5rem 1.5rem; max-width: 960px; margin: 0 auto; }
-    .gallery-section h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; }
+    .gallery-section { padding: 3rem 1.5rem 1.5rem; max-width: 960px; margin: 0 auto; }
+    .gallery-section h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.2rem; }
 
-    .gallery-hero { width: 100%; height: 360px; border-radius: 14px; overflow: hidden; margin-bottom: 6px; position: relative; cursor: pointer; }
-    .gallery-hero img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
-    .gallery-hero img:hover { transform: scale(1.02); }
-    .gallery-hero-label { position: absolute; bottom: 14px; left: 14px; background: rgba(0,0,0,0.55); color: #fff; font-size: 13px; font-weight: 500; padding: 5px 12px; border-radius: 20px; letter-spacing: 0.5px; pointer-events: none; }
-    .gallery-zoom-hint { position: absolute; top: 14px; right: 14px; background: rgba(0,0,0,0.45); color: #fff; font-size: 11px; padding: 4px 10px; border-radius: 20px; pointer-events: none; }
+    .gallery-hero { width: 100%; height: 420px; border-radius: 16px; overflow: hidden; margin-bottom: 12px; position: relative; cursor: pointer; box-shadow: var(--shadow); }
+    .gallery-hero img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; }
+    .gallery-hero:hover img { transform: scale(1.04); }
+    .gallery-hero.fade-effect img { opacity: 0.3; }
+    
+    .gallery-hero-label { position: absolute; bottom: 16px; left: 16px; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); color: #fff; font-size: 13px; font-weight: 500; padding: 6px 14px; border-radius: 20px; letter-spacing: 0.5px; pointer-events: none; transition: var(--transition); }
+    .gallery-zoom-hint { position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); color: #fff; font-size: 11px; padding: 5px 12px; border-radius: 20px; pointer-events: none; transition: var(--transition); opacity: 0.8; }
+    .gallery-hero:hover .gallery-zoom-hint { opacity: 1; background: var(--accent); }
 
-    .gallery-thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-    .thumb-wrap { cursor: pointer; border-radius: 10px; overflow: hidden; border: 2px solid transparent; transition: border-color 0.2s; }
-    .thumb-wrap.active { border-color: var(--accent); }
-    .thumb-wrap img { width: 100%; height: 80px; object-fit: cover; display: block; transition: opacity 0.2s; }
-    .thumb-wrap:hover img { opacity: 0.82; }
-    .thumb-label { background: var(--white); text-align: center; font-size: 10px; color: var(--muted); padding: 4px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+    .gallery-thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+    .thumb-wrap { cursor: pointer; border-radius: 12px; overflow: hidden; border: 2px solid transparent; background: var(--white); box-shadow: var(--shadow); transition: var(--transition); }
+    .thumb-wrap.active { border-color: var(--accent); transform: translateY(-2px); }
+    .thumb-wrap img { width: 100%; height: 85px; object-fit: cover; display: block; transition: opacity 0.3s; }
+    .thumb-wrap:hover { transform: translateY(-3px); }
+    .thumb-wrap:hover img { opacity: 0.85; }
+    .thumb-label { background: var(--white); text-align: center; font-size: 10px; color: var(--muted); padding: 5px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
 
     /* LIGHTBOX */
-    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.93); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; }
-    .lightbox.open { display: flex; }
-    .lightbox img { max-width: 92vw; max-height: 80vh; border-radius: 10px; object-fit: contain; }
-    .lb-title { color: #fff; font-size: 15px; margin-top: 14px; font-weight: 500; }
-    .lb-count { color: #aaa; font-size: 13px; margin-top: 4px; }
-    .lb-close { position: absolute; top: 18px; right: 22px; color: white; font-size: 30px; cursor: pointer; background: none; border: none; }
-    .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 36px; cursor: pointer; background: rgba(255,255,255,0.1); border: none; padding: 8px 16px; border-radius: 8px; transition: background 0.2s; }
-    .lb-nav:hover { background: rgba(255,255,255,0.2); }
-    .lb-prev { left: 12px; }
-    .lb-next { right: 12px; }
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(12,12,11,0.96); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; opacity: 0; transition: opacity 0.3s ease; }
+    .lightbox.open { display: flex; opacity: 1; }
+    .lightbox img { max-width: 92vw; max-height: 78vh; border-radius: 12px; object-fit: contain; transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .lightbox.open img { transform: scale(1); }
+    .lb-title { color: #fff; font-size: 16px; margin-top: 16px; font-weight: 500; font-family: 'Playfair Display', serif; }
+    .lb-count { color: #888; font-size: 13px; margin-top: 4px; }
+    .lb-close { position: absolute; top: 20px; right: 24px; color: white; font-size: 32px; cursor: pointer; background: none; border: none; transition: var(--transition); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+    .lb-close:hover { background: rgba(255,255,255,0.1); transform: rotate(90deg); }
+    .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 36px; cursor: pointer; background: rgba(255,255,255,0.06); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); width: 50px; height: 50px; border-radius: 50%; transition: var(--transition); display: flex; align-items: center; justify-content: center; }
+    .lb-nav:hover { background: var(--accent); border-color: var(--accent); color: white; }
+    .lb-prev { left: 16px; }
+    .lb-next { right: 16px; }
 
     /* FEATURES */
-    .features-section { max-width: 960px; margin: 2rem auto 0; padding: 0 1.5rem; }
-    .features-section h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 10px; }
-    .feature-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 16px 14px; display: flex; flex-direction: column; gap: 6px; }
-    .feature-icon { font-size: 22px; }
-    .feature-label { font-size: 13px; font-weight: 500; }
+    .features-section { max-width: 960px; margin: 3rem auto 0; padding: 0 1.5rem; }
+    .features-section h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.2rem; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 12px; }
+    .feature-card { 
+      background: var(--white); 
+      border: 1px solid var(--border); 
+      border-radius: 14px; 
+      padding: 18px 16px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 6px; 
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-light);
+      box-shadow: 0 12px 25px rgba(196,123,58,0.08);
+    }
+    .feature-icon { font-size: 24px; transition: transform 0.3s; }
+    .feature-card:hover { transform: translateY(-5px); }
+    .feature-card:hover .feature-icon { transform: scale(1.2) rotate(5deg); }
+    .feature-label { font-size: 14px; font-weight: 600; }
     .feature-sub { font-size: 12px; color: var(--muted); }
 
     /* DETAILS */
-    .details-section { max-width: 960px; margin: 2rem auto 0; padding: 0 1.5rem; }
-    .details-section h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; }
-    .details-table { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
-    .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 18px; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .details-section { max-width: 960px; margin: 3rem auto 0; padding: 0 1.5rem; }
+    .details-section h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.2rem; }
+    .details-table { background: var(--white); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+    .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: 14px; transition: background 0.2s; }
+    .detail-row:hover { background: #FAF9F6; }
     .detail-row:last-child { border-bottom: none; }
     .detail-key { color: var(--muted); }
     .detail-val { font-weight: 500; }
-    .avail-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); font-size: 13px; font-weight: 600; padding: 3px 10px; border-radius: 100px; }
+    .owner-highlight { color: var(--accent); font-weight: 600; font-size: 15px; }
+    .avail-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 100px; }
 
     /* MAP */
-    .map-section { max-width: 960px; margin: 2rem auto 0; padding: 0 1.5rem; }
-    .map-section h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; }
-    .map-embed { width: 100%; height: 280px; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
+    .map-section { max-width: 960px; margin: 3rem auto 0; padding: 0 1.5rem; }
+    .map-section h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.2rem; }
+    .map-embed { width: 100%; height: 300px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); transition: var(--transition); }
+    .map-embed:hover { border-color: var(--accent-light); }
     .map-embed iframe { width: 100%; height: 100%; border: none; display: block; }
 
     /* CONTACT */
-    .contact-section { max-width: 960px; margin: 2rem auto 0; padding: 0 1.5rem 3rem; }
-    .contact-card { background: var(--dark); border-radius: 18px; padding: 2rem 1.5rem; text-align: center; color: var(--white); }
-    .contact-card h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 0.4rem; }
-    .contact-card p { font-size: 14px; color: #B0AEA6; margin-bottom: 1.5rem; }
-    .contact-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; padding: 13px 28px; border-radius: 100px; text-decoration: none; transition: opacity 0.2s; }
-    .contact-btn:hover { opacity: 0.88; }
+    .contact-section { max-width: 960px; margin: 3rem auto 0; padding: 0 1.5rem 4rem; }
+    .contact-card { background: var(--dark); border-radius: 24px; padding: 2.5rem 2rem; text-align: center; color: var(--white); box-shadow: 0 20px 40px rgba(0,0,0,0.15); position: relative; overflow: hidden; }
+    .contact-card::after {
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(196,123,58,0.05) 0%, transparent 70%); pointer-events: none;
+    }
+    .contact-card h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 0.2rem; }
+    .contact-owner-title { font-size: 15px; color: var(--accent-light); font-weight: 600; margin-bottom: 0.6rem; letter-spacing: 0.5px; }
+    .contact-card p { font-size: 14px; color: #B0AEA6; margin-bottom: 1.8rem; }
+    .contact-btn { 
+      display: inline-flex; align-items: center; gap: 10px; 
+      background: var(--accent); color: var(--white); 
+      font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; 
+      padding: 14px 32px; border-radius: 100px; text-decoration: none; 
+      box-shadow: 0 6px 20px rgba(196,123,58,0.3);
+      transition: var(--transition); 
+    }
+    .contact-btn:hover { background: var(--accent-light); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(196,123,58,0.4); }
     .contact-btn svg { width: 20px; height: 20px; fill: var(--white); }
-    .wa-link { display: inline-flex; align-items: center; gap: 7px; color: #4ADE80; font-size: 14px; text-decoration: none; margin-top: 1.2rem; }
+    .wa-container { margin-top: 1.4rem; }
+    .wa-link { display: inline-flex; align-items: center; gap: 7px; color: #4ADE80; font-size: 14px; text-decoration: none; font-weight: 500; transition: var(--transition); }
+    .wa-link:hover { color: #22c55e; transform: scale(1.02); }
 
-    footer { text-align: center; padding: 1.5rem; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); }
+    footer { text-align: center; padding: 2rem; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); background: #FAF9F5; }
 
     @media (max-width: 600px) {
-      .gallery-hero { height: 230px; }
-      .gallery-thumbs { grid-template-columns: repeat(5, 1fr); gap: 5px; }
-      .thumb-wrap img { height: 58px; }
+      .gallery-hero { height: 260px; }
+      .gallery-thumbs { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+      .thumb-wrap img { height: 60px; }
       .thumb-label { font-size: 9px; }
-      .booking-card { flex-direction: column; text-align: center; }
-      .avail-banner-inner { flex-direction: column; gap: 8px; }
+      .booking-card { flex-direction: column; text-align: center; padding: 1.5rem; }
+      .avail-banner-inner { flex-direction: column; gap: 10px; }
+      .lb-nav { width: 44px; height: 44px; font-size: 28px; }
     }
   </style>
 </head>
 <body>
 
-<!-- TOP AVAILABILITY BANNER -->
 <div class="avail-banner">
   <div class="avail-banner-inner">
     <div class="avail-dot"></div>
     <div class="avail-text">
-      🗓️ Flat <strong>1 mahine baad available</strong> hoga &nbsp;•&nbsp; Abhi booking le sakte hain
+      Ilaaka: Amaltas Society • Flat <strong>1 mahine baad available</strong> hoga • Abhi booking open hai
     </div>
     <a class="book-now-btn" href="tel:6263723598">📞 Book Now</a>
   </div>
 </div>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-badge">Rent ke liye uplabdh</div>
-  <h1>2 BHK Flat<br>Bhopal mein</h1>
+  <h1>2 BHK Beautiful Flat<br>Bhopal mein</h1>
+  <div class="hero-owner">Owner: Anish Yadav</div>
   <p class="hero-address">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
     Amaltas Housing Society, Near People Mall, Bhopal
   </p>
   <div class="hero-price">
-    <span class="amount">&#8377;13,000</span>
+    <span class="amount">₹13,000</span>
     <span class="per">/ mahine</span>
   </div>
 </div>
 
-<!-- BOOKING NOTICE CARD -->
-<section class="booking-section">
+<section class="booking-section reveal">
   <div class="booking-card">
     <div class="booking-icon">📅</div>
     <div class="booking-text">
       <h3>1 Mahine Baad Available Hoga</h3>
-      <p>Yeh flat <strong>Pooja ke baad</strong> available hoga. Agar aap interest rakhte hain toh <strong>abhi hi booking confirm kar sakte hain</strong> — pehle aao pehle pao!</p>
+      <p>Yeh flat <strong>Pooja ke baad</strong> khaali hoga. Agar aap interest rakhte hain toh <strong>Anish ji se baat karke abhi hi booking confirm kar sakte hain</strong> — pehle aao pehle pao!</p>
     </div>
-    <a class="booking-cta" href="https://wa.me/916263723598?text=Hello%2C%20mujhe%20aapka%202%20BHK%20flat%20book%20karna%20hai%20Amaltas%20Housing%20Society%20mein.%20Kripya%20details%20batayein.">
+    <a class="booking-cta" href="https://wa.me/916263723598?text=Hello%2C%20Anish%20Yadav%20ji.%20Mujhe%20aapka%202%20BHK%20flat%20book%20karna%20hai%20Amaltas%20Housing%20Society%20mein.%20Kripya%20details%20batayein.">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.528 5.845L0 24l6.335-1.508A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.007-1.368l-.359-.213-3.76.985.998-3.658-.234-.374A9.818 9.818 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
       WhatsApp pe Book Karein
     </a>
   </div>
 </section>
 
-<!-- GALLERY -->
-<section class="gallery-section">
+<section class="gallery-section reveal">
   <h2>Photos (10)</h2>
 
-  <div class="gallery-hero" onclick="openLightbox(currentIdx)">
+  <div class="gallery-hero" onclick="openLightbox(currentIdx)" id="galleryHero">
     <img id="mainPhoto" src="images/front.jpeg" alt="Flat photo" />
     <div class="gallery-hero-label" id="mainLabel">🏠 Front View</div>
     <div class="gallery-zoom-hint">🔍 Click to zoom</div>
@@ -276,18 +410,16 @@
   </div>
 </section>
 
-<!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
-  <button class="lb-close" onclick="closeLightbox()">&#10005;</button>
-  <button class="lb-nav lb-prev" onclick="lbNav(-1)">&#8249;</button>
+  <button class="lb-close" onclick="closeLightbox()">✕</button>
+  <button class="lb-nav lb-prev" onclick="lbNav(-1)">‹</button>
   <img id="lbImg" src="" alt="Full photo" />
   <div class="lb-title" id="lbTitle"></div>
   <div class="lb-count" id="lbCount"></div>
-  <button class="lb-nav lb-next" onclick="lbNav(1)">&#8250;</button>
+  <button class="lb-nav lb-next" onclick="lbNav(1)">›</button>
 </div>
 
-<!-- FEATURES -->
-<section class="features-section">
+<section class="features-section reveal">
   <h2>Flat ki Khaasiyatein</h2>
   <div class="features-grid">
     <div class="feature-card"><div class="feature-icon">🏠</div><div class="feature-label">2 BHK</div><div class="feature-sub">Unfurnished</div></div>
@@ -299,122 +431,111 @@
   </div>
 </section>
 
-<!-- DETAILS -->
-<section class="details-section">
+<section class="details-section reveal">
   <h2>Flat ki Jaankari</h2>
-
   <div class="details-table">
-
+    <div class="detail-row">
+      <span class="detail-key">Owner Name</span>
+      <span class="detail-val owner-highlight">Anish Yadav</span>
+    </div>
     <div class="detail-row">
       <span class="detail-key">Property Type</span>
       <span class="detail-val">2 BHK Apartment</span>
     </div>
-
     <div class="detail-row">
       <span class="detail-key">Furnishing</span>
       <span class="detail-val">Unfurnished</span>
     </div>
-
     <div class="detail-row">
       <span class="detail-key">Floor</span>
       <span class="detail-val">6th (Lift Available)</span>
     </div>
-
     <div class="detail-row">
       <span class="detail-key">Parking</span>
       <span class="detail-val">Available</span>
     </div>
-
     <div class="detail-row">
       <span class="detail-key">Society</span>
       <span class="detail-val">Amaltas Housing Society</span>
     </div>
-
     <div class="detail-row">
       <span class="detail-key">Landmark</span>
       <span class="detail-val">Near People Mall & Petrol Pump</span>
     </div>
-
     <div class="detail-row">
       <span class="detail-key">Availability</span>
-      <span class="detail-val">
-        <span class="avail-tag">✅ 1 Mahine Mein Available</span>
-      </span>
+      <span class="detail-val"><span class="avail-tag">✅ 1 Mahine Mein Available</span></span>
     </div>
-
     <div class="detail-row">
       <span class="detail-key">Rent</span>
-      <span class="detail-val" style="color:var(--accent);font-size:16px;">
-        ₹13,000 / month (Negotiable)
-      </span>
+      <span class="detail-val" style="color:var(--accent);font-size:16px;font-weight:600;">₹13,000 / month (Negotiable)</span>
     </div>
-
     <div class="detail-row">
       <span class="detail-key">Maintenance</span>
       <span class="detail-val">₹1,500 / month</span>
     </div>
-
     <div class="detail-row">
-      <span class="detail-key">Electricity Bill</span>
+      <span class="detail-key">Electricity & Water</span>
       <span class="detail-val">Tenant Pay Karega</span>
     </div>
-
-    <div class="detail-row">
-      <span class="detail-key">Water Bill</span>
-      <span class="detail-val">Tenant Pay Karega</span>
-    </div>
-
   </div>
 </section>
 
-<!-- MAP -->
-<section class="map-section">
+<section class="map-section reveal">
   <h2>Location</h2>
   <div class="map-embed">
-    <iframe src="https://maps.google.com/maps?q=Amaltas+Housing+Society+near+People+Mall+Bhopal&output=embed" allowfullscreen loading="lazy"></iframe>
+    <iframe src="https://maps.google.com/maps?q=Amaltas%20Housing%20Society,%20Bhopal&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen loading="lazy"></iframe>
   </div>
 </section>
 
-<!-- CONTACT -->
-<section class="contact-section">
+<section class="contact-section reveal">
   <div class="contact-card">
     <h2>Sampark Karein</h2>
+    <div class="contact-owner-title">Owner: Anish Yadav</div>
     <p>Flat dekhne ke liye ya booking ke liye call karein — 1 mahine mein available!</p>
     <a class="contact-btn" href="tel:6263723598">
       <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
       6263723598
     </a>
-    <div>
-      <a class="wa-link" href="https://wa.me/916263723598?text=Hello%2C%20mujhe%20aapka%202%20BHK%20flat%20dekhna%2Fbook%20karna%20hai%20Amaltas%20Housing%20Society%20mein.">
+    <div class="wa-container">
+      <a class="wa-link" href="https://wa.me/916263723598?text=Hello%2C%20Anish%20Yadav%20ji.%20Mujhe%20aapka%202%20BHK%20flat%20dekhna%2Fbook%20karna%20hai%20Amaltas%20Housing%20Society%20mein.">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="#4ADE80"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.528 5.845L0 24l6.335-1.508A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.007-1.368l-.359-.213-3.76.985.998-3.658-.234-.374A9.818 9.818 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-        WhatsApp pe bhi message kar sakte hain
+        WhatsApp par message karein
       </a>
     </div>
   </div>
 </section>
 
-<footer>&copy; 2025 &middot; 2 BHK Flat for Rent &middot; Amaltas Housing Society, Bhopal</footer>
+<footer>© 2026 · 2 BHK Flat for Rent · Owner: Anish Yadav · Bhopal</footer>
 
 <script>
   var photos = [
-    { src: "images/front.jpeg",                       label: "🏠 Front View" },
-    { src: "images/building_view.jpeg",               label: "🏙️ Building View" },
-    { src: "images/straight_view.jpeg",               label: "👁️ Straight View" },
-    { src: "images/view_from_front_ddoor.jpeg",       label: "🚪 View from Front Door" },
-    { src: "images/corner_side_flat.jpeg",            label: "📐 Corner Side" },
-    { src: "images/bedroom.jpeg",                     label: "🛏️ Bedroom" },
-    { src: "images/kitchen.jpeg",                     label: "🍳 Kitchen" },
-    { src: "images/bathroom.jpeg",                    label: "🚿 Bathroom" },
-    { src: "images/back view balcony1.jpeg",          label: "🌅 Balcony View" },
-    { src: "images/backside_balcony_space.jpeg",      label: "🌅 Balcony Space" }
+    { src: "images/front.jpeg",               label: "🏠 Front View" },
+    { src: "images/building_view.jpeg",       label: "🏙️ Building View" },
+    { src: "images/straight_view.jpeg",       label: "👁️ Straight View" },
+    { src: "images/view_from_front_ddoor.jpeg",label: "🚪 View from Front Door" },
+    { src: "images/corner_side_flat.jpeg",     label: "📐 Corner Side" },
+    { src: "images/bedroom.jpeg",              label: "🛏️ Bedroom" },
+    { src: "images/kitchen.jpeg",              label: "🍳 Kitchen" },
+    { src: "images/bathroom.jpeg",             label: "🚿 Bathroom" },
+    { src: "images/back view balcony1.jpeg",   label: "🌅 Balcony View" },
+    { src: "images/backside_balcony_space.jpeg",label: "🌅 Balcony Space" }
   ];
 
   var currentIdx = 0;
 
+  // SMOOTH SLIDER IMAGES CHANGING TRANSITION
   function setMain(idx, el) {
     currentIdx = idx;
-    document.getElementById('mainPhoto').src = photos[idx].src;
-    document.getElementById('mainLabel').textContent = photos[idx].label;
+    var hero = document.getElementById('galleryHero');
+    hero.style.opacity = 0.5; // fade down
+    
+    setTimeout(function() {
+      document.getElementById('mainPhoto').src = photos[idx].src;
+      document.getElementById('mainLabel').textContent = photos[idx].label;
+      hero.style.opacity = 1; // fade up
+    }, 200);
+
     document.querySelectorAll('.thumb-wrap').forEach(function(t){ t.classList.remove('active'); });
     el.classList.add('active');
   }
@@ -424,11 +545,15 @@
     document.getElementById('lbImg').src = photos[idx].src;
     document.getElementById('lbTitle').textContent = photos[idx].label;
     document.getElementById('lbCount').textContent = (idx + 1) + ' / ' + photos.length;
-    document.getElementById('lightbox').classList.add('open');
+    var lb = document.getElementById('lightbox');
+    lb.style.display = 'flex';
+    setTimeout(function(){ lb.classList.add('open'); }, 10);
   }
 
   function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('open');
+    var lb = document.getElementById('lightbox');
+    lb.classList.remove('open');
+    setTimeout(function(){ lb.style.display = 'none'; }, 300);
   }
 
   function lbNav(dir) {
@@ -444,6 +569,21 @@
     if(e.key === 'ArrowRight') lbNav(1);
     if(e.key === 'ArrowLeft') lbNav(-1);
   });
+
+  // SCROLL ANIMATION LOGIC (REVEAL SECTIONS ON SCROLL)
+  function revealSections() {
+    var reveals = document.querySelectorAll(".reveal");
+    for (var i = 0; i < reveals.length; i++) {
+      var windowHeight = window.innerHeight;
+      var elementTop = reveals[i].getBoundingClientRect().top;
+      var elementVisible = 100;
+      if (elementTop < windowHeight - elementVisible) {
+        reveals[i].classList.add("active");
+      }
+    }
+  }
+  window.addEventListener("scroll", revealSections);
+  window.addEventListener("load", revealSections); // Trigger once loaded
 </script>
 </body>
 </html>
